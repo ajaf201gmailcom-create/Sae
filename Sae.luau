@@ -1,284 +1,189 @@
+local DiscordInvite = "https://discord.gg/8UNY58pxk"
+
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
 
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local player = Players.LocalPlayer
 
-local G = {
-	BG = Color3.fromRGB(14, 15, 25),
-	BG2 = Color3.fromRGB(20, 22, 36),
-	BG3 = Color3.fromRGB(28, 30, 50),
-	SEP = Color3.fromRGB(42, 45, 70),
-	TEXT = Color3.fromRGB(198, 198, 215),
-	MUTED = Color3.fromRGB(92, 95, 122),
-	WHITE = Color3.fromRGB(228, 228, 240),
-	ACCENT = Color3.fromRGB(80, 135, 218),
-	GREEN = Color3.fromRGB(58, 208, 92),
-	RED = Color3.fromRGB(228, 62, 62)
-}
-
-local DISCORD_LINK = "https://discord.gg/HnYTWpKpV"
-
-local function corner(p, r)
-	local c = Instance.new("UICorner")
-	c.CornerRadius = UDim.new(0, r or 6)
-	c.Parent = p
-	return c
-end
-
-local function stroke(p, col, t)
-	local s = Instance.new("UIStroke")
-	s.Color = col or G.SEP
-	s.Thickness = t or 1
-	s.Parent = p
-	return s
-end
-
-local oldGui = PlayerGui:FindFirstChild("UpdateRequired")
-if oldGui then
-	oldGui:Destroy()
-end
+pcall(function()
+    local old = CoreGui:FindFirstChild("OutdatedScriptUI")
+    if old then
+        old:Destroy()
+    end
+end)
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "UpdateRequired"
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Name = "OutdatedScriptUI"
 ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = PlayerGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local Frame = Instance.new("Frame")
-Frame.Name = "Main"
-Frame.Size = UDim2.new(0, 320, 0, 185)
-Frame.Position = UDim2.new(0.5, -160, 0.5, -92)
-Frame.BackgroundColor3 = G.BG
-Frame.BorderSizePixel = 0
-Frame.ClipsDescendants = true
-Frame.Parent = ScreenGui
-corner(Frame, 8)
-stroke(Frame, G.SEP, 1)
-
-local TitleBar = Instance.new("Frame")
-TitleBar.Name = "TitleBar"
-TitleBar.Size = UDim2.new(1, 0, 0, 30)
-TitleBar.BackgroundColor3 = G.BG2
-TitleBar.BorderSizePixel = 0
-TitleBar.Parent = Frame
-corner(TitleBar, 8)
-
-local TitleLbl = Instance.new("TextLabel")
-TitleLbl.Size = UDim2.new(1, -45, 1, 0)
-TitleLbl.Position = UDim2.new(0, 12, 0, 0)
-TitleLbl.BackgroundTransparency = 1
-TitleLbl.Text = "Vincitore"
-TitleLbl.TextColor3 = G.WHITE
-TitleLbl.TextSize = 11
-TitleLbl.Font = Enum.Font.GothamBold
-TitleLbl.TextXAlignment = Enum.TextXAlignment.Left
-TitleLbl.Parent = TitleBar
-
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, 24, 0, 20)
-CloseBtn.Position = UDim2.new(1, -28, 0.5, -10)
-CloseBtn.BackgroundColor3 = G.BG3
-CloseBtn.Text = "X"
-CloseBtn.TextColor3 = G.MUTED
-CloseBtn.TextSize = 10
-CloseBtn.Font = Enum.Font.GothamBold
-CloseBtn.BorderSizePixel = 0
-CloseBtn.AutoButtonColor = false
-CloseBtn.Parent = TitleBar
-corner(CloseBtn, 4)
-
-local Sep = Instance.new("Frame")
-Sep.Size = UDim2.new(1, -16, 0, 1)
-Sep.Position = UDim2.new(0, 8, 0, 30)
-Sep.BackgroundColor3 = G.SEP
-Sep.BorderSizePixel = 0
-Sep.Parent = Frame
-
-local StatusLbl = Instance.new("TextLabel")
-StatusLbl.Size = UDim2.new(1, -20, 0, 20)
-StatusLbl.Position = UDim2.new(0, 10, 0, 42)
-StatusLbl.BackgroundTransparency = 1
-StatusLbl.Text = "SCRIPT OUTDATED"
-StatusLbl.TextColor3 = G.RED
-StatusLbl.TextSize = 12
-StatusLbl.Font = Enum.Font.GothamBold
-StatusLbl.TextXAlignment = Enum.TextXAlignment.Left
-StatusLbl.Parent = Frame
-
-local MsgLbl = Instance.new("TextLabel")
-MsgLbl.Size = UDim2.new(1, -20, 0, 42)
-MsgLbl.Position = UDim2.new(0, 10, 0, 65)
-MsgLbl.BackgroundTransparency = 1
-MsgLbl.Text = "This script is outdated.\nJoin our Discord server to get the updated script."
-MsgLbl.TextColor3 = G.TEXT
-MsgLbl.TextSize = 11
-MsgLbl.Font = Enum.Font.Gotham
-MsgLbl.TextWrapped = true
-MsgLbl.TextYAlignment = Enum.TextYAlignment.Top
-MsgLbl.TextXAlignment = Enum.TextXAlignment.Left
-MsgLbl.Parent = Frame
-
-local DiscordBox = Instance.new("TextBox")
-DiscordBox.Size = UDim2.new(1, -100, 0, 28)
-DiscordBox.Position = UDim2.new(0, 10, 0, 112)
-DiscordBox.BackgroundColor3 = G.BG3
-DiscordBox.Text = DISCORD_LINK
-DiscordBox.TextColor3 = G.TEXT
-DiscordBox.TextSize = 10
-DiscordBox.Font = Enum.Font.Gotham
-DiscordBox.TextXAlignment = Enum.TextXAlignment.Left
-DiscordBox.ClearTextOnFocus = false
-DiscordBox.TextEditable = true
-DiscordBox.MultiLine = false
-DiscordBox.BorderSizePixel = 0
-DiscordBox.Parent = Frame
-corner(DiscordBox, 5)
-stroke(DiscordBox, G.SEP, 1)
-
-local BoxPad = Instance.new("UIPadding")
-BoxPad.PaddingLeft = UDim.new(0, 7)
-BoxPad.PaddingRight = UDim.new(0, 7)
-BoxPad.Parent = DiscordBox
-
-local CopyBtn = Instance.new("TextButton")
-CopyBtn.Size = UDim2.new(0, 82, 0, 28)
-CopyBtn.Position = UDim2.new(1, -92, 0, 112)
-CopyBtn.BackgroundColor3 = G.ACCENT
-CopyBtn.Text = "Copy Link"
-CopyBtn.TextColor3 = G.WHITE
-CopyBtn.TextSize = 10
-CopyBtn.Font = Enum.Font.GothamBold
-CopyBtn.BorderSizePixel = 0
-CopyBtn.AutoButtonColor = false
-CopyBtn.Parent = Frame
-corner(CopyBtn, 5)
-
-local HintLbl = Instance.new("TextLabel")
-HintLbl.Size = UDim2.new(1, -20, 0, 20)
-HintLbl.Position = UDim2.new(0, 10, 0, 148)
-HintLbl.BackgroundTransparency = 1
-HintLbl.Text = "Can't copy? Tap the link above and copy it manually."
-HintLbl.TextColor3 = G.MUTED
-HintLbl.TextSize = 9
-HintLbl.Font = Enum.Font.Gotham
-HintLbl.TextXAlignment = Enum.TextXAlignment.Center
-HintLbl.Parent = Frame
-
-CloseBtn.MouseButton1Click:Connect(function()
-	ScreenGui:Destroy()
+pcall(function()
+    ScreenGui.Parent = CoreGui
 end)
 
-CloseBtn.MouseEnter:Connect(function()
-	CloseBtn.BackgroundColor3 = G.RED
-	CloseBtn.TextColor3 = G.WHITE
-end)
+if not ScreenGui.Parent then
+    ScreenGui.Parent = player:WaitForChild("PlayerGui")
+end
 
-CloseBtn.MouseLeave:Connect(function()
-	CloseBtn.BackgroundColor3 = G.BG3
-	CloseBtn.TextColor3 = G.MUTED
-end)
+local Main = Instance.new("Frame")
+Main.Name = "Main"
+Main.Size = UDim2.new(0, 420, 0, 250)
+Main.Position = UDim2.new(0.5, -210, 0.5, -125)
+Main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+Main.BorderSizePixel = 0
+Main.Parent = ScreenGui
 
-CopyBtn.MouseButton1Click:Connect(function()
-	local success = false
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 12)
+Corner.Parent = Main
 
-	pcall(function()
-		if typeof(setclipboard) == "function" then
-			setclipboard(DISCORD_LINK)
-			success = true
-		elseif typeof(toclipboard) == "function" then
-			toclipboard(DISCORD_LINK)
-			success = true
-		end
-	end)
+local Stroke = Instance.new("UIStroke")
+Stroke.Color = Color3.fromRGB(70, 70, 80)
+Stroke.Thickness = 1
+Stroke.Parent = Main
 
-	if success then
-		CopyBtn.Text = "Copied!"
-		CopyBtn.BackgroundColor3 = G.GREEN
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -30, 0, 40)
+Title.Position = UDim2.new(0, 15, 0, 15)
+Title.BackgroundTransparency = 1
+Title.Text = "This Script Is Outdated"
+Title.TextColor3 = Color3.fromRGB(255, 90, 90)
+Title.TextSize = 24
+Title.Font = Enum.Font.GothamBold
+Title.Parent = Main
 
-		task.delay(1.5, function()
-			if CopyBtn and CopyBtn.Parent then
-				CopyBtn.Text = "Copy Link"
-				CopyBtn.BackgroundColor3 = G.ACCENT
-			end
-		end)
-	else
-		CopyBtn.Text = "Manual Copy"
-		CopyBtn.BackgroundColor3 = G.RED
-		DiscordBox.TextEditable = true
-		DiscordBox:CaptureFocus()
-		DiscordBox.CursorPosition = #DiscordBox.Text + 1
-		DiscordBox.SelectionStart = 1
+local Description = Instance.new("TextLabel")
+Description.Size = UDim2.new(1, -40, 0, 55)
+Description.Position = UDim2.new(0, 20, 0, 60)
+Description.BackgroundTransparency = 1
+Description.Text = "Join our Discord server to get the new script."
+Description.TextColor3 = Color3.fromRGB(220, 220, 225)
+Description.TextSize = 16
+Description.Font = Enum.Font.Gotham
+Description.TextWrapped = true
+Description.Parent = Main
 
-		task.delay(2, function()
-			if CopyBtn and CopyBtn.Parent then
-				CopyBtn.Text = "Copy Link"
-				CopyBtn.BackgroundColor3 = G.ACCENT
-			end
-		end)
-	end
-end)
+local LinkBox = Instance.new("TextBox")
+LinkBox.Size = UDim2.new(1, -40, 0, 38)
+LinkBox.Position = UDim2.new(0, 20, 0, 120)
+LinkBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
+LinkBox.BorderSizePixel = 0
+LinkBox.Text = DiscordInvite
+LinkBox.TextColor3 = Color3.fromRGB(120, 180, 255)
+LinkBox.TextSize = 14
+LinkBox.Font = Enum.Font.Gotham
+LinkBox.ClearTextOnFocus = false
+LinkBox.TextEditable = false
+LinkBox.Parent = Main
+
+local LinkCorner = Instance.new("UICorner")
+LinkCorner.CornerRadius = UDim.new(0, 8)
+LinkCorner.Parent = LinkBox
+
+local CopyButton = Instance.new("TextButton")
+CopyButton.Size = UDim2.new(0, 160, 0, 38)
+CopyButton.Position = UDim2.new(0.5, -80, 0, 170)
+CopyButton.BackgroundColor3 = Color3.fromRGB(80, 130, 255)
+CopyButton.BorderSizePixel = 0
+CopyButton.Text = "Copy Discord Link"
+CopyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CopyButton.TextSize = 14
+CopyButton.Font = Enum.Font.GothamBold
+CopyButton.Parent = Main
+
+local CopyCorner = Instance.new("UICorner")
+CopyCorner.CornerRadius = UDim.new(0, 8)
+CopyCorner.Parent = CopyButton
+
+local Fallback = Instance.new("TextLabel")
+Fallback.Size = UDim2.new(1, -40, 0, 25)
+Fallback.Position = UDim2.new(0, 20, 0, 215)
+Fallback.BackgroundTransparency = 1
+Fallback.Text = "Fallback manual copy"
+Fallback.TextColor3 = Color3.fromRGB(150, 150, 160)
+Fallback.TextSize = 12
+Fallback.Font = Enum.Font.Gotham
+Fallback.Parent = Main
+
+local function CopyDiscord()
+    local copied = false
+
+    if typeof(setclipboard) == "function" then
+        local success = pcall(function()
+            setclipboard(DiscordInvite)
+        end)
+
+        if success then
+            copied = true
+        end
+    end
+
+    if copied then
+        CopyButton.Text = "Copied!"
+        CopyButton.BackgroundColor3 = Color3.fromRGB(70, 180, 110)
+
+        task.delay(1.5, function()
+            if CopyButton and CopyButton.Parent then
+                CopyButton.Text = "Copy Discord Link"
+                CopyButton.BackgroundColor3 = Color3.fromRGB(80, 130, 255)
+            end
+        end)
+    else
+        LinkBox.TextEditable = true
+        LinkBox:CaptureFocus()
+        LinkBox.CursorPosition = #DiscordInvite + 1
+        LinkBox.SelectionStart = 1
+        LinkBox.CursorPosition = #DiscordInvite + 1
+
+        CopyButton.Text = "Copy Manually"
+
+        task.delay(1.5, function()
+            if CopyButton and CopyButton.Parent then
+                CopyButton.Text = "Copy Discord Link"
+            end
+        end)
+    end
+end
+
+CopyButton.MouseButton1Click:Connect(CopyDiscord)
 
 local dragging = false
 local dragStart
 local startPos
 
-local function ipos(input)
-	local p = input.Position
-	return Vector2.new(p.X, p.Y)
+local function updateDrag(input)
+    local delta = input.Position - dragStart
+
+    Main.Position = UDim2.new(
+        startPos.X.Scale,
+        startPos.X.Offset + delta.X,
+        startPos.Y.Scale,
+        startPos.Y.Offset + delta.Y
+    )
 end
 
-TitleBar.InputBegan:Connect(function(input)
-	local t = input.UserInputType
+Main.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
 
-	if t ~= Enum.UserInputType.MouseButton1
-		and t ~= Enum.UserInputType.Touch then
-		return
-	end
+        dragging = true
+        dragStart = input.Position
+        startPos = Main.Position
 
-	local mp = UserInputService:GetMouseLocation()
-	local cb = CloseBtn.AbsolutePosition
-	local cs = CloseBtn.AbsoluteSize
-
-	if mp.X >= cb.X
-		and mp.X <= cb.X + cs.X
-		and mp.Y >= cb.Y
-		and mp.Y <= cb.Y + cs.Y then
-		return
-	end
-
-	dragging = true
-	dragStart = ipos(input)
-	startPos = Frame.Position
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-	local t = input.UserInputType
-
-	if t == Enum.UserInputType.MouseButton1
-		or t == Enum.UserInputType.Touch then
-		dragging = false
-	end
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if not dragging then
-		return
-	end
-
-	local t = input.UserInputType
-
-	if t ~= Enum.UserInputType.MouseMovement
-		and t ~= Enum.UserInputType.Touch then
-		return
-	end
-
-	local delta = ipos(input) - dragStart
-
-	Frame.Position = UDim2.new(
-		startPos.X.Scale,
-		startPos.X.Offset + delta.X,
-		startPos.Y.Scale,
-		startPos.Y.Offset + delta.Y
-	)
+    if dragging and (
+        input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch
+    ) then
+        updateDrag(input)
+    end
 end)
